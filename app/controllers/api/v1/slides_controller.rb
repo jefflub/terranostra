@@ -11,7 +11,7 @@ module Api::V1
 
     # GET /slides/1
     def show
-      render json: @slide
+      render json: @slide, include: :image
     end
 
     # POST /slides

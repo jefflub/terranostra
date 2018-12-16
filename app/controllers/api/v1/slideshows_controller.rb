@@ -11,7 +11,7 @@ module Api::V1
 
     # GET /slideshows/1
     def show
-      render json: @slideshow
+      render json: @slideshow, include: { slides: { include: :image } }
     end
 
     # POST /slideshows
