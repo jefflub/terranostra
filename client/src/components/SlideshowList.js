@@ -26,8 +26,7 @@ class SlideshowList extends Component {
                {this.state.slideshows.map( slideshow => {
                     return (
                         <div className="single-slideshow" key={slideshow.id}>
-                            <Link to={'/slideshow/' + slideshow.id}><h4>{slideshow.audio_url}</h4></Link>
-                            <p>{slideshow.public.toString()}</p>
+                            <h4>{slideshow.title} (<Link to={`/slideshow/${slideshow.id}`}>Show</Link>) (<Link to={`/edit_slideshow/${slideshow.id}`}>Edit</Link>)</h4>
                             <audio className="theme-audio" src={slideshow.audio_url} type="audio/mp3" controls></audio>
                         </div>
                     )

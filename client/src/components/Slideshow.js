@@ -10,7 +10,9 @@ class Slideshow extends Component {
         }
     }
     componentDidMount() {
-        axios.get('/api/v1/slideshows/2')
+        const { id } = this.props.match.params
+
+        axios.get(`/api/v1/slideshows/${id}`)
         .then(response => {
             console.log(response)
             this.setState({
@@ -55,7 +57,7 @@ class Slideshow extends Component {
                         <ul className="smil-tocList">
                             {this.state.slideshow.slides.map( slide => {
                                 return (
-                                    <li><a href={'#slide' + slide.id}>{slide.notes}</a></li>
+                                    <li><a href={'#slide' + slide.id}>{slide.title}</a></li>
                                 )
                             })}
                         </ul>

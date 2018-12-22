@@ -47,7 +47,7 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def slide_params
-        params.require(:slide).permit(:start_time, :duration, :notes)
+        params.require(:slide).permit(:start_time, :title, :image_id, :notes, :slide_type)
       end
   end
 end
