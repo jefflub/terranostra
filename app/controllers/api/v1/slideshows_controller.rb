@@ -19,7 +19,7 @@ module Api::V1
       @slideshow = Slideshow.new(slideshow_params)
 
       if @slideshow.save
-        render json: @slideshow, status: :created, location: @slideshow
+        render json: @slideshow, status: :created, location: api_v1_slideshow_url(@slideshow.id)
       else
         render json: @slideshow.errors, status: :unprocessable_entity
       end

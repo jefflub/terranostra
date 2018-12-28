@@ -1,10 +1,11 @@
 module Api::V1
   class SlidesController < ApplicationController
     before_action :set_slide, only: [:show, :update, :destroy]
+    before_action :set_slideshow, only: [:create, :index]
 
-    # GET /slides
+    # GET /slideshows/1/slides
     def index
-      @slides = Slide.all
+      @slides = @slideshow.slides
 
       render json: @slides
     end
@@ -14,12 +15,12 @@ module Api::V1
       render json: @slide, include: :image
     end
 
-    # POST /slides
+    # POST /slideshows/1/slides
     def create
-      @slide = Slide.new(slide_params)
+      @slide = @slideshow.slides.build(slide_params)
 
       if @slide.save
-        render json: @slide, status: :created, location: @slide
+        render json: @slide, status: :created, location: api_v1_slide_url(@slide.id)
       else
         render json: @slide.errors, status: :unprocessable_entity
       end
@@ -43,6 +44,10 @@ module Api::V1
       # Use callbacks to share common setup or constraints between actions.
       def set_slide
         @slide = Slide.find(params[:id])
+      end
+
+      def set_slideshow
+        @slideshow = Slideshow.find(params[:slideshow_id])
       end
 
       # Only allow a trusted parameter "white list" through.

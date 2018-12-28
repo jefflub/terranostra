@@ -1,5 +1,6 @@
 FactoryBot.define do
     factory :slide do
+        image
         start_time { 0 }
         title { "Slide" }
         notes { "Notes" }
