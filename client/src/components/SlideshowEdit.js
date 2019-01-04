@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import NewSlideForm from './NewSlideForm';
 
 class SlideshowEdit extends Component {
     constructor(props) {
@@ -8,6 +9,32 @@ class SlideshowEdit extends Component {
         this.state = {
             slideshow: null
         }
+        this.addNewSlide = this.addNewSlide.bind(this);
+        this.removeSlide = this.removeSlide.bind(this);
+    }
+
+    addNewSlide(start_time, title, notes, image_id) {
+        axios.post(`/api/v1/slideshows/${this.state.slideshow.id}/slides`, {slide: {image_id: image_id, start_time: start_time, title: title, notes: notes}})
+        .then(response => {
+            console.log(response)
+            this.setState({slideshow: response.data})
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    removeSlide(id) {
+        axios.delete( '/api/v1/slides/' + id )
+        .then(response => {
+            const slides = this.state.slideshow.slides.filter(
+                slide => slide.id !== id
+            )
+            const slideshow = this.state.slideshow
+            slideshow.slides = slides
+            this.setState({slideshow})
+        })
+        .catch(error => console.log(error))
     }
 
     componentDidMount() {
@@ -38,28 +65,35 @@ class SlideshowEdit extends Component {
                     <Link to="/">Home</Link>
                     <div>
                         <table border="1">
-                            <tr>
-                                <th>ID</th>
-                                <th>Type</th>
-                                <th>Image</th>
-                                <th>Title</th>
-                                <th>Start Time</th>
-                                <th>Notes</th>
-                            </tr>
-                            {this.state.slideshow.slides.map( slide => {
-                                    return (
-                                        <tr>
-                                            <td>{slide.id}</td>
-                                            <td>{slide.slide_type}</td>
-                                            <td>{slide.image_id}</td>
-                                            <td>{slide.title}</td>
-                                            <td>{secondsToTimecode(slide.start_time)}</td>
-                                            <td>{slide.notes}</td>
-                                        </tr>
-                                    )
-                                })}  
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Start Time</th>
+                                    <th>Notes</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.slideshow.slides.map( slide => {
+                                        return (
+                                            <tr key={slide.id}>
+                                                <td>{slide.id}</td>
+                                                <td>{slide.slide_type}</td>
+                                                <td>{slide.image_id}</td>
+                                                <td>{slide.title}</td>
+                                                <td>{secondsToTimecode(slide.start_time)}</td>
+                                                <td>{slide.notes}</td>
+                                                <td><button onClick={() => this.removeSlide(slide.id)}>Delete</button></td>
+                                            </tr>
+                                        )
+                                    })}  
+                            </tbody>
                         </table>
                     </div>
+                    <div><NewSlideForm onNewSlide={this.addNewSlide} /></div>
                 </div>
             );
         }

@@ -20,7 +20,8 @@ module Api::V1
       @slide = @slideshow.slides.build(slide_params)
 
       if @slide.save
-        render json: @slide, status: :created, location: api_v1_slide_url(@slide.id)
+        # Returns the whole slideshow so that the new slide is seen in time context
+        render json: @slideshow, status: :created, include: { slides: { include: :image } }
       else
         render json: @slide.errors, status: :unprocessable_entity
       end
