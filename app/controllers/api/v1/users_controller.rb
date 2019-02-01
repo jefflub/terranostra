@@ -1,7 +1,7 @@
 module Api::V1
   class UsersController < ApplicationController
     before_action :set_user, only: [:show, :update, :destroy]
-
+    skip_before_action :authenticate, only: [:create]
     # GET /users
     def index
       @users = User.all
