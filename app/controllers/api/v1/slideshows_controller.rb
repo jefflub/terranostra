@@ -1,6 +1,8 @@
 module Api::V1
   class SlideshowsController < ApplicationController
     before_action :set_slideshow, only: [:show, :update, :destroy]
+    skip_before_action :authenticate, only: [:index, :show]
+
 
     # GET /slideshows
     def index
